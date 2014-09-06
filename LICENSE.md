@@ -1,3 +1,6 @@
+Note: Google Gson and the Mojang Profile API are each under their own respective licenses.
+
+
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
