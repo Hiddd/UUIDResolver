@@ -1,0 +1,16 @@
+main: dev.localchum.uuidresolver.UUIDResolver
+version: 0.4.1-STABLE
+name: UUIDResolver
+author: LocalChum
+description: Provides UUID resolution and limited backwards resolution functionality.
+load: STARTUP
+
+commands:
+  uuidresolver:
+    usage: /uuidresolver repair-ntid|repair-idtn|stats|uuid <player>|username <uuid>|bench|async-name <player>|async-id <id>
+    description: UUIDResolver Administrative Command
+    aliases: [ur]
+
+permissions:
+  uuidresolver.admin:
+    default: op
