@@ -2,7 +2,7 @@ main: dev.localchum.uuidresolver.UUIDResolver
 version: 0.4.1-STABLE
 name: UUIDResolver
 author: LocalChum
-description: Provides UUID resolution and limited backwards resolution functionality.
+description: Provides complete forward and backward UUID and username resolution capabilities.
 load: STARTUP
 
 commands:
