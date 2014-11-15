@@ -69,9 +69,7 @@ public class UUIDResolver extends JavaPlugin implements Listener {
 			for (Entry<String, String> u: ret){
 				resolutionCache.remove(u.getKey());
 				resolutionCacheLower.remove(u.getKey());
-				if (!failedUsernameResolutions.contains(u.getValue())){
-					failedUsernameResolutions.add(u.getValue());
-				}
+				failedUsernameResolutions.add(u.getValue());
 				LOGGER.severe("Deleted: " + u.getKey() + ":" + u.getValue());
 			}
 			return new ResolutionInfo(false, null, null); // Prevent duplicate entries
@@ -111,8 +109,8 @@ public class UUIDResolver extends JavaPlugin implements Listener {
 	public static FileConfiguration savedCache = null;
 	public static ConcurrentHashMap<String, String> resolutionCache = new ConcurrentHashMap<String, String>();
 	public static ConcurrentHashMap<String, String> resolutionCacheLower = new ConcurrentHashMap<String, String>();
-	public static List<String> failedUsernameResolutions = Collections.synchronizedList(new ArrayList<String>());
-	public static List<String> failedUUIDResolutions = Collections.synchronizedList(new ArrayList<String>());
+	public static Set<String> failedUsernameResolutions = Collections.synchronizedSet(new HashSet<String>());
+	public static Set<String> failedUUIDResolutions = Collections.synchronizedSet(new HashSet<String>());
 	
 	public void onEnable(){
 		i = this;
