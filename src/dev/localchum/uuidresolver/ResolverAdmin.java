@@ -33,24 +33,14 @@ public class ResolverAdmin implements CommandExecutor {
 			sender.sendMessage(color("&eTotal Entries: " + UUIDResolver.resolutionCache.size() + "/" + UUIDResolver.resolutionCacheLower.size()));
 			sender.sendMessage(color("&eFailed Sync NTID Resolutions: "));
 			String syncRes = "&e";
-			for (int i = 0; i < UUIDResolver.failedUsernameResolutions.size(); i++){
-				String u = UUIDResolver.failedUsernameResolutions.get(i);
-				if (UUIDResolver.failedUsernameResolutions.size() - 1 == i){
-					syncRes += u;
-				} else {
-					syncRes += u + ", ";
-				}
+			for (String fr: UUIDResolver.failedUsernameResolutions){
+				syncRes += fr + " ";
 			}
 			sender.sendMessage(color(syncRes));
 			sender.sendMessage(color("&eFailed Sync IDTN Resolutions: "));
 			String syncRes2 = "&e";
-			for (int i = 0; i < UUIDResolver.failedUUIDResolutions.size(); i++){
-				String u = UUIDResolver.failedUUIDResolutions.get(i);
-				if (UUIDResolver.failedUUIDResolutions.size() - 1 == i){
-					syncRes2 += u;
-				} else {
-					syncRes2 += u + ", ";
-				}
+			for (String fr: UUIDResolver.failedUUIDResolutions){
+				syncRes2 += fr + " ";
 			}
 			sender.sendMessage(color(syncRes2));
 			break;
