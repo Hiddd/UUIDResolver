@@ -11,7 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.UUID;
 
 /**
@@ -50,12 +52,12 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
              */
 
             File legacy = new File(getDataFolder() + File.separator + "resolver-cache.yml");
-            if (legacy.exists()){
+            if (legacy.exists()) {
                 File legacyRename = new File(getDataFolder() + File.separator + "resolver-cache.yml.imported");
                 BufferedReader br = new BufferedReader(new FileReader(legacy));
                 String line;
 
-                while ((line = br.readLine()) != null){
+                while ((line = br.readLine()) != null) {
                     String[] split = line.split(":");
                     Util.trimAll(split);
 
@@ -74,7 +76,7 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
              * Autosave Scheduling
              */
 
-            if (config.autoSaveIntervalMinutes != -1){
+            if (config.autoSaveIntervalMinutes != -1) {
                 Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
                     @Override
                     public void run() {
@@ -94,14 +96,14 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
     }
 
     @Override
-    public void onDisable(){
-        if (instance != null){
+    public void onDisable() {
+        if (instance != null) {
             instance.save();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event){
+    public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
         instance.onLoginAllowBlocking(event.getUniqueId(), event.getName());
     }
 }

@@ -16,7 +16,7 @@ public class Util {
     }
 
     public static void trimAll(String[] split) {
-        for (int i = 0; i < split.length; i++){
+        for (int i = 0; i < split.length; i++) {
             split[i] = split[i].trim();
         }
     }

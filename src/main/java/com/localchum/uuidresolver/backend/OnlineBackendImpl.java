@@ -83,7 +83,7 @@ public class OnlineBackendImpl implements IOnlineBackend {
     }
 
     @Override
-    public Runnable lookupUsername(final ICacheBackend cache, final UUID uuid, final Callback callback) {
+    public Runnable lookupUsername(final ICacheBackend cache, final UUID uuid, final Callback<MojangProfile> callback) {
         return new Runnable() {
             @Override
             public void run() {

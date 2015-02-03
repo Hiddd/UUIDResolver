@@ -2,12 +2,11 @@ package dev.localchum.uuidresolver;
 
 import com.localchum.uuidresolver.*;
 
-import javax.naming.spi.Resolver;
 import java.util.UUID;
 
 /**
  * Legacy Bridge
- * <p/>
+ *
  * For the current, clean API, please look at ResolverAPI.
  */
 public class UUIDResolver {
@@ -28,7 +27,7 @@ public class UUIDResolver {
         throw new IllegalStateException();
     }
 
-    private static ResolutionInfo nameToIdForce(ResolutionInfo info){
+    private static ResolutionInfo nameToIdForce(ResolutionInfo info) {
         ResolverAPI api = UuidResolver.get();
 
         UUID uuid = api.getUUIDSync(info.username);
@@ -49,7 +48,7 @@ public class UUIDResolver {
         }
     }
 
-    private static ResolutionInfo idToNameForce(ResolutionInfo info){
+    private static ResolutionInfo idToNameForce(ResolutionInfo info) {
         ResolverAPI api = UuidResolver.get();
 
         UUID uuid = asUUID(info.uuid);
