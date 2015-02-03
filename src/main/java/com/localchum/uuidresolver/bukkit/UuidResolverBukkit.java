@@ -90,6 +90,7 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
              */
 
             Bukkit.getPluginManager().registerEvents(this, this);
+            getCommand("uuidresolver").setExecutor(new CommandAdmin());
         } catch (Exception e) {
             e.printStackTrace();
         }
