@@ -1,0 +1,5 @@
+name: UUIDResolver
+main: com.localchum.uuidresolver.bukkit.UuidResolverBukkit
+version: 2.0
+author: LocalChum
+description: Enables the forward and backward resolution of Mojang UUIDs, with both online and offline support
