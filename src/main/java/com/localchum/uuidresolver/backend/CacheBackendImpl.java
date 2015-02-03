@@ -67,7 +67,8 @@ public class CacheBackendImpl implements ICacheBackend {
 
                 byte[] userBytes = new byte[16]; // with the characters in usernames, chars --> utf8 bytes is always 1:1
 
-                for (int i = 0; i < in.readInt(); i++) {
+                int len = in.readInt();
+                for (int i = 0; i < len; i++) {
                     long msb = in.readLong();
                     long lsb = in.readLong();
                     UUID uuid = new UUID(msb, lsb);

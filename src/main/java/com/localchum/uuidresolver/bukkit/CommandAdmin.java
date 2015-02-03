@@ -21,14 +21,7 @@ public class CommandAdmin implements CommandExecutor {
 
     private UUID isUuid(String string){
         if (string.length() == 32) {
-            for (int i = 0; i < string.length(); i++) {
-                char c = string.charAt(i);
-                if (!(Character.isDigit(c) || (c >= 'a' && c <= 'f'))) {
-                    return null;
-                }
-            }
-
-            return Util.fromWebUuid(string);
+            string = Util.fromWebUuid(string).toString();
         }
 
         if (string.length() == 36){

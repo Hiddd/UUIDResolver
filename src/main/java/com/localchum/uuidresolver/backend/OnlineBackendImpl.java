@@ -87,7 +87,7 @@ public class OnlineBackendImpl implements IOnlineBackend {
         return new Runnable() {
             @Override
             public void run() {
-                String result = performHttpsGet(String.format(USERNAME_URL, uuid));
+                String result = performHttpsGet(String.format(USERNAME_URL, Util.toWebUuid(uuid)));
                 if (result == null) {
                     if (callback != null) {
                         callback.run(null);
@@ -97,8 +97,6 @@ public class OnlineBackendImpl implements IOnlineBackend {
 
                 Map<String, Object>[] obj = UuidResolver.gson.fromJson(result, Map[].class);
 
-                System.out.println(result);
-                System.out.println(obj);
                 if (obj.length > 0) {
                     String name = (String) obj[0].get("name");
 

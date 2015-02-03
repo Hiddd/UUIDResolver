@@ -29,6 +29,8 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
             /*
              * Load Config
              */
+            getDataFolder().mkdirs();
+
             File configFile = new File(getDataFolder() + File.separator + "config.json");
             if (!configFile.exists()) {
                 configFile.createNewFile();
