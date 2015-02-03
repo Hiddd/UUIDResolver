@@ -38,7 +38,7 @@ public class UUIDResolver {
             api.unsafeOnline().lookupUUID(api.unsafeCache(), info.username, new Callback<MojangProfile>() {
                 @Override
                 public void run(MojangProfile obj) {
-                    ret.uuid = consistentFormat(obj.uuid.toString());
+                    ret.uuid = obj.uuid != null ? consistentFormat(obj.uuid.toString()) : null;
                     ret.username = obj.username;
                 }
             }).run();
