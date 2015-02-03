@@ -1,13 +1,12 @@
 package com.localchum.uuidresolver.backend;
 
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -45,7 +44,6 @@ public class CacheBackendImpl implements ICacheBackend {
     public void insert(UUID uuid, String username, int time) {
         entries.put(uuid, username);
         lowerLookup.put(username.toLowerCase(), uuid);
-
     }
 
     @Override
@@ -55,36 +53,42 @@ public class CacheBackendImpl implements ICacheBackend {
                 file.createNewFile();
             }
 
-            lock.writeLock().lock();
+            try {
+                lock.writeLock().lock();
 
-            DataInputStream in = new DataInputStream(new FileInputStream(file));
-            int ver = in.readByte();
-            if (ver == -1) {
-                return;
-            } // EOF
+                FileInputStream fis = new FileInputStream(file);
+                DataInputStream in = new DataInputStream(fis);
+                int ver = in.read();
+                if (ver == -1){ return; }
 
-            if (ver != FILE_VERSION_HEADER) {
-                throw new IllegalStateException("File version mismatch");
+                if (ver != FILE_VERSION_HEADER) {
+                    throw new IllegalStateException("File version mismatch");
+                }
+
+                byte[] userBytes = new byte[16]; // with the characters in usernames, chars --> utf8 bytes is always 1:1
+
+                for (int i = 0; i < in.readInt(); i++) {
+                    long msb = in.readLong();
+                    long lsb = in.readLong();
+                    UUID uuid = new UUID(msb, lsb);
+
+                    byte userLen = in.readByte();
+                    if (userLen > 16){
+                        throw new IllegalStateException("Username bytes > 16");
+                    }
+
+                    in.read(userBytes, 0, userLen);
+                    String username = new String(userBytes, 0, userLen, StandardCharsets.UTF_8);
+
+                    int time = in.readInt();
+
+                    insert(uuid, username, time);
+                }
+
+                in.close();
+            } finally {
+                lock.writeLock().unlock();
             }
-
-            byte[] userBytes = new byte[16]; // with the characters in usernames, chars --> utf8 bytes is always 1:1
-            for (int i = 0; i < in.readInt(); i++) {
-                long msb = in.readLong();
-                long lsb = in.readLong();
-                UUID uuid = new UUID(msb, lsb);
-
-                byte userLen = in.readByte();
-                in.read(userBytes);
-                String username = new String(userBytes, 0, userLen, StandardCharsets.UTF_8);
-
-                int time = in.readInt();
-
-                insert(uuid, username, time);
-            }
-
-            in.close();
-
-            lock.writeLock().unlock();
         }
     }
 
@@ -97,11 +101,18 @@ public class CacheBackendImpl implements ICacheBackend {
 
             lock.readLock().lock();
 
+            HashMap<UUID, String> entriesCopy = new HashMap<>(entries);
+            TObjectIntMap<UUID> timesCopy = new TObjectIntHashMap<>(times);
+
+            lock.readLock().unlock();
+
             DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
             out.write(FILE_VERSION_HEADER);
 
+            out.writeInt(entriesCopy.size());
+
             byte[] userBytes;
-            for (Map.Entry<UUID, String> e : entries.entrySet()) {
+            for (Map.Entry<UUID, String> e : entriesCopy.entrySet()) {
                 UUID uuid = e.getKey();
                 String username = e.getValue();
 
@@ -110,18 +121,17 @@ public class CacheBackendImpl implements ICacheBackend {
 
                 userBytes = username.getBytes(StandardCharsets.UTF_8);
                 if (userBytes.length > 16) {
-                    throw new IllegalStateException("Username bytes > 16? Not a valid username?");
+                    throw new IllegalStateException("Username bytes > 16?");
                 }
+
                 out.writeByte(userBytes.length);
                 out.write(userBytes);
 
-                out.writeInt(times.get(uuid));
+                out.writeInt(timesCopy.get(uuid));
             }
 
             out.flush();
             out.close();
-
-            lock.readLock().unlock();
         }
     }
 

@@ -24,10 +24,11 @@ public class UuidResolver {
 
     public UuidResolver(UuidResolverConfig config, File file) {
         api = new ResolverAPI(config.cacheClass, config.onlineClass);
-        load();
         this.config = config;
         this.file = file;
         this.populator = new CachePopulator(api);
+
+        load();
     }
 
     public void onLoginAllowBlocking(UUID uuid, String username) {

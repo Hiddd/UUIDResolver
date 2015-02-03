@@ -81,7 +81,7 @@ public class UUIDResolver {
     }
 
     public static UUID asUUID(String s) {
-        return Util.fromWebUuid(s);
+        return Util.fromWebUuid(s.replace("-", ""));
     }
 
     public static String consistentFormat(String uuid) {

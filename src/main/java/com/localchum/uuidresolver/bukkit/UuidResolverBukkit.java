@@ -38,6 +38,10 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
             UuidResolverConfig config = UuidResolver.gson.fromJson(fr, UuidResolverConfig.class);
             fr.close();
 
+            if (config == null){
+                config = new UuidResolverConfig();
+            }
+
             config.verify();
 
             /*

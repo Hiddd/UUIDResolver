@@ -63,6 +63,7 @@ public class ResolverAPI {
         UUID uuid = getUUIDSync(username);
         if (uuid != null) {
             callback.run(new MojangProfile(uuid, getUsernameSync(uuid)));
+            return;
         } // correct case
 
         lookupPool.submit(online.lookupUUID(cache, username, callback));
@@ -72,6 +73,7 @@ public class ResolverAPI {
         String username = getUsernameSync(uuid);
         if (username != null) {
             callback.run(new MojangProfile(uuid, username));
+            return;
         }
 
         lookupPool.submit(online.lookupUsername(cache, uuid, callback));

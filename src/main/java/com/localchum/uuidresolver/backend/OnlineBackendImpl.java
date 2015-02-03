@@ -97,6 +97,8 @@ public class OnlineBackendImpl implements IOnlineBackend {
 
                 Map<String, Object>[] obj = UuidResolver.gson.fromJson(result, Map[].class);
 
+                System.out.println(result);
+                System.out.println(obj);
                 if (obj.length > 0) {
                     String name = (String) obj[0].get("name");
 

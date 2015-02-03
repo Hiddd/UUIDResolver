@@ -67,7 +67,7 @@ public class CommandAdmin implements CommandExecutor {
                 UuidResolver.get().getUsernameAsync(uuidToUsername, new Callback<MojangProfile>() {
                     @Override
                     public void run(MojangProfile obj) {
-                        sender.sendMessage(ChatColor.YELLOW + "[ASYNC] " + uuidToUsername.toString() + " = " + obj.username + " (" + (System.currentTimeMillis() - start) + "ms)");
+                        sender.sendMessage(ChatColor.YELLOW + "[?] " + uuidToUsername.toString() + " = " + obj.username + " (" + (System.currentTimeMillis() - start) + "ms)");
                     }
                 });
             } else {
@@ -76,6 +76,8 @@ public class CommandAdmin implements CommandExecutor {
                 long diff = System.nanoTime() - start;
                 sender.sendMessage(ChatColor.YELLOW + "[SYNC] " + uuidToUsername.toString() + " = " + username + " (" + diff + "ns)");
             }
+
+            return;
         }
 
         /*
@@ -86,7 +88,7 @@ public class CommandAdmin implements CommandExecutor {
             UuidResolver.get().getUUIDAsync(input, new Callback<MojangProfile>() {
                 @Override
                 public void run(MojangProfile obj) {
-                    sender.sendMessage(ChatColor.YELLOW + "[ASYNC] " + obj.username + " = " + obj.uuid + " (" + (System.currentTimeMillis() - start) + "ms)");
+                    sender.sendMessage(ChatColor.YELLOW + "[?] " + obj.username + " = " + obj.uuid + " (" + (System.currentTimeMillis() - start) + "ms)");
                 }
             });
         } else {
@@ -109,7 +111,7 @@ public class CommandAdmin implements CommandExecutor {
                 if (args.length < 2){ sendUsage(sender, command); return true; }
                 String input = args[1];
                 if (isUuid(input) != null || isUsername(input) != null){
-                    determineAndLookup(sender, input, args[1].equalsIgnoreCase("lookup-any"));
+                    determineAndLookup(sender, input, args[0].equalsIgnoreCase("lookup-any"));
                 }
                 break;
             case "bench":

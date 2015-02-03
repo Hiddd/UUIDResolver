@@ -17,7 +17,7 @@ public class Util {
 
     public static void trimAll(String[] split) {
         for (int i = 0; i < split.length; i++) {
-            split[i] = split[i].trim();
+            split[i] = split[i].trim().replace("\'", "");
         }
     }
 }
