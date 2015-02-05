@@ -20,6 +20,8 @@ public interface ICacheBackend {
 
     public void purge(int days);
 
+    public int cacheSize();
+
     public UUID getConflicting(String username, UUID expected);
 
 }

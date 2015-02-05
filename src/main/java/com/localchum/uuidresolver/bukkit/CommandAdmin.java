@@ -123,6 +123,22 @@ public class CommandAdmin implements CommandExecutor {
 
                 sender.sendMessage(ChatColor.YELLOW + "[BENCH] IDTN=" + diffUsernames + "ns, NTID=" + diffUuids + "ns");
                 break;
+            case "stats":
+                sender.sendMessage(ChatColor.YELLOW + "[STATS] Size=" + UuidResolver.get().unsafeCache().cacheSize());
+                break;
+            case "purge":
+                if (args.length < 2){ sendUsage(sender, command); return true; }
+                int days;
+                try {
+                    days = Integer.valueOf(args[1]);
+                } catch (Exception e){
+                    sendUsage(sender, command);
+                    return true;
+                }
+
+                UuidResolver.get().unsafeCache().purge(days);
+                sender.sendMessage(ChatColor.YELLOW + "[PURGE] Cache purged");
+                break;
             default:
                 sendUsage(sender, command);
         }

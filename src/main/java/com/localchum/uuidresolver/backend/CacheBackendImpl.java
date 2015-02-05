@@ -141,7 +141,7 @@ public class CacheBackendImpl implements ICacheBackend {
         lock.writeLock().lock();
 
         UUID id = lowerLookup.get(name.toLowerCase());
-        times.put(id, currentExpiryTime());
+        if (id != null){ times.put(id, currentExpiryTime()); }
 
         lock.writeLock().unlock();
         return id;
@@ -152,7 +152,7 @@ public class CacheBackendImpl implements ICacheBackend {
         lock.writeLock().lock();
 
         String name = entries.get(uuid);
-        times.put(uuid, currentExpiryTime());
+        if (name != null){ times.put(uuid, currentExpiryTime()); }
 
         lock.writeLock().unlock();
         return name;
@@ -183,6 +183,17 @@ public class CacheBackendImpl implements ICacheBackend {
         }
 
         lock.writeLock().unlock();
+    }
+
+    @Override
+    public int cacheSize() {
+        lock.readLock().lock();
+
+        int size = entries.size();
+
+        lock.readLock().unlock();
+
+        return size;
     }
 
     public UUID getConflicting(String username, UUID expected) {
