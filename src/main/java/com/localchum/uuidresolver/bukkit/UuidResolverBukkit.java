@@ -104,9 +104,12 @@ public class UuidResolverBukkit extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        getLogger().info("Saving...");
         if (instance != null) {
             instance.save();
         }
+        getLogger().info("Saved");
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

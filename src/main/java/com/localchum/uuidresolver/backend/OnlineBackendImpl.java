@@ -95,17 +95,31 @@ public class OnlineBackendImpl implements IOnlineBackend {
                     return;
                 }
 
-                Map<String, Object>[] obj = UuidResolver.gson.fromJson(result, Map[].class);
+                Map<String, Object>[] nameHistory = UuidResolver.gson.fromJson(result, Map[].class);
 
-                if (obj.length > 0) {
-                    String name = (String) obj[0].get("name");
+                if (nameHistory.length > 0) {
+                    String currName = null;
+                    long time = -1;
 
-                    cache.addEntry(uuid, name);
+                    for (Map<String, Object> o : nameHistory) {
+                        Object cta = o.get("changedToAt");
+                        String name = (String) o.get("name");
+
+                        if ((cta != null && cta instanceof Double && ((Double) cta).longValue() > time) || (time == -1 && cta == null)) {
+                            currName = name;
+                        }
+                    }
+
+                    cache.addEntry(uuid, currName);
+
                     if (callback != null) {
-                        callback.run(new MojangProfile(uuid, name));
+                        callback.run(new MojangProfile(uuid, currName));
+                    }
+                } else {
+                    if (callback != null) {
+                        callback.run(null);
                     }
                 }
-
             }
         };
     }
