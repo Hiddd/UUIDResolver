@@ -7,5 +7,5 @@ load: STARTUP
 
 commands:
   uuidresolver:
-    usage: /uuidresolver <lookup-sync <name|uuid>|lookup-any <name|uuid>|bench>
+    usage: /uuidresolver <lookup-sync <name|uuid>|lookup-any <name|uuid>|bench|stats|purge>
     description: UuidResolver Administrative Command
