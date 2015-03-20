@@ -60,22 +60,10 @@ public class ResolverAPI {
     */
 
     public void getUUIDAsync(String username, Callback<MojangProfile> callback) {
-        UUID uuid = getUUIDSync(username);
-        if (uuid != null) {
-            callback.run(new MojangProfile(uuid, getUsernameSync(uuid)));
-            return;
-        } // correct case
-
         lookupPool.submit(online.lookupUUID(cache, username, callback));
     }
 
     public void getUsernameAsync(UUID uuid, Callback<MojangProfile> callback) {
-        String username = getUsernameSync(uuid);
-        if (username != null) {
-            callback.run(new MojangProfile(uuid, username));
-            return;
-        }
-
         lookupPool.submit(online.lookupUsername(cache, uuid, callback));
     }
 
