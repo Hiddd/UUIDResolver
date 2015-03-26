@@ -57,10 +57,16 @@ public class CommandAdmin implements CommandExecutor {
         if (uuidToUsername != null) {
             if (async){
                 final long start = System.currentTimeMillis();
-                UuidResolver.get().getUsernameAsync(uuidToUsername, new Callback<MojangProfile>() {
+                UuidResolver.get().getPreviousUsernamesAsync(uuidToUsername, new Callback<MojangProfile[]>() {
                     @Override
-                    public void run(MojangProfile obj) {
-                        sender.sendMessage(ChatColor.YELLOW + "[?] " + uuidToUsername.toString() + " = " + obj.username + " (" + (System.currentTimeMillis() - start) + "ms)");
+                    public void run(MojangProfile[] obj) {
+                        if (obj.length > 1){
+                            sender.sendMessage(ChatColor.YELLOW + "Showing all previous usernames for the specified UUID. The last name listed is their most current username.");
+                        }
+
+                        for (MojangProfile profile: obj) {
+                            sender.sendMessage(ChatColor.YELLOW + "[?] " + uuidToUsername.toString() + " = " + profile.username + " (" + (System.currentTimeMillis() - start) + "ms)");
+                        }
                     }
                 });
             } else {

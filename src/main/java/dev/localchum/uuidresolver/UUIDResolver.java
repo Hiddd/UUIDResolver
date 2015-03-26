@@ -57,10 +57,10 @@ public class UUIDResolver {
             return new ResolutionInfo(true, username, info.uuid);
         } else {
             final ResolutionInfo ret = new ResolutionInfo(false, null, info.uuid);
-            api.unsafeOnline().lookupUsername(api.unsafeCache(), uuid, new Callback<MojangProfile>() {
+            api.unsafeOnline().lookupPreviousUsernames(api.unsafeCache(), uuid, new Callback<MojangProfile[]>() {
                 @Override
-                public void run(MojangProfile obj) {
-                    ret.username = obj.username;
+                public void run(MojangProfile[] obj) {
+                    ret.username = obj[0].username;
                 }
             }).run();
 

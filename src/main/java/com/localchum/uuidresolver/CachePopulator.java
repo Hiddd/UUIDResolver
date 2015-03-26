@@ -24,10 +24,11 @@ public class CachePopulator {
         if (conflict != null) {
             // look up correct name for the other player
 
-            api.online.lookupUsername(api.cache, conflict, new Callback<MojangProfile>() {
+            api.online.lookupPreviousUsernames(api.cache, conflict, new Callback<MojangProfile[]>() {
                 @Override
-                public void run(MojangProfile obj) {
-                    api.cache.addEntry(obj.uuid, obj.username);
+                public void run(MojangProfile[] obj) {
+                    MojangProfile profile = obj[obj.length - 1];
+                    api.cache.addEntry(profile.uuid, profile.username);
                 }
             }).run(); // resolve synchronously
         }
