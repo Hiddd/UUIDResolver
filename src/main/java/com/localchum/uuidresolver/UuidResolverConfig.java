@@ -17,14 +17,16 @@ public class UuidResolverConfig {
         if (cacheClass == null) {
             cacheClass = CacheBackendImpl.class.getName();
         }
+
         if (onlineClass == null) {
             onlineClass = OnlineBackendImpl.class.getName();
         }
         if (saveFile == null) {
             saveFile = "cache.dat";
         }
+
         if (autoSaveIntervalMinutes == 0) {
-            autoSaveIntervalMinutes = -1;
+            autoSaveIntervalMinutes = 5;
         }
     }
 }
