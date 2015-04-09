@@ -63,8 +63,17 @@ public class ResolverAPI {
         lookupPool.submit(online.lookupUUID(cache, username, callback));
     }
 
-    public void getUsernameAsync(UUID uuid, Callback<MojangProfile> callback) {
-        lookupPool.submit(online.lookupUsername(cache, uuid, callback));
+    public void getUsernameAsync(UUID uuid, final Callback<MojangProfile> callback) {
+        lookupPool.submit(online.lookupPreviousUsernames(cache, uuid, new Callback<MojangProfile[]>() {
+            @Override
+            public void run(MojangProfile[] obj) {
+                callback.run(obj[obj.length - 1]);
+            }
+        }));
+    }
+
+    public void getPreviousUsernamesAsync(UUID uuid, final Callback<MojangProfile[]> callback) {
+        lookupPool.submit(online.lookupPreviousUsernames(cache, uuid, callback));
     }
 
     /*

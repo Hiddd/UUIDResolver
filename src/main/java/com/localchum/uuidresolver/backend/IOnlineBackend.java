@@ -12,5 +12,5 @@ public interface IOnlineBackend {
 
     public Runnable lookupUUID(ICacheBackend cache, String usernames, Callback<MojangProfile> callback);
 
-    public Runnable lookupUsername(ICacheBackend cache, UUID uuids, Callback<MojangProfile> callback);
+    public Runnable lookupPreviousUsernames(ICacheBackend cache, UUID uuids, Callback<MojangProfile[]> callback);
 }

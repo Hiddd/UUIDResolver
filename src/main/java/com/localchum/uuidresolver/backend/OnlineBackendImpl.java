@@ -7,8 +7,7 @@ import com.localchum.uuidresolver.UuidResolver;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by LocalChum on 12/22/2014.
@@ -83,7 +82,7 @@ public class OnlineBackendImpl implements IOnlineBackend {
     }
 
     @Override
-    public Runnable lookupUsername(final ICacheBackend cache, final UUID uuid, final Callback<MojangProfile> callback) {
+    public Runnable lookupPreviousUsernames(final ICacheBackend cache, final UUID uuid, final Callback<MojangProfile[]> callback) {
         return new Runnable() {
             @Override
             public void run() {
@@ -96,29 +95,34 @@ public class OnlineBackendImpl implements IOnlineBackend {
                 }
 
                 Map<String, Object>[] nameHistory = UuidResolver.gson.fromJson(result, Map[].class);
+                if (nameHistory.length == 0){
+                    if (callback != null){ callback.run(null); }
+                    return;
+                }
 
-                if (nameHistory.length > 0) {
-                    String currName = null;
-                    long time = -1;
+                List<MojangProfile> profileHistory = new ArrayList<>();
 
-                    for (Map<String, Object> o : nameHistory) {
-                        Object cta = o.get("changedToAt");
-                        String name = (String) o.get("name");
+                for (Map<String, Object> o : nameHistory) {
+                    Object cta = o.get("changedToAt");
+                    String name = (String) o.get("name");
+                    long changedAsLong = (cta != null && cta instanceof Double ? ((Double) cta).longValue() : 0);
 
-                        if ((cta != null && cta instanceof Double && ((Double) cta).longValue() > time) || (time == -1 && cta == null)) {
-                            currName = name;
-                        }
+                    profileHistory.add(
+                            new MojangProfile(uuid, name, changedAsLong)
+                    );
+                }
+
+                Collections.sort(profileHistory, new Comparator<MojangProfile>() {
+                    @Override
+                    public int compare(MojangProfile o1, MojangProfile o2) {
+                        return Long.compare(o1.usernameLastChangedAt, o2.usernameLastChangedAt);
                     }
+                });
 
-                    cache.addEntry(uuid, currName);
+                cache.addEntry(uuid, profileHistory.get(0).username);
 
-                    if (callback != null) {
-                        callback.run(new MojangProfile(uuid, currName));
-                    }
-                } else {
-                    if (callback != null) {
-                        callback.run(null);
-                    }
+                if (callback != null) {
+                    callback.run(profileHistory.toArray(new MojangProfile[0]));
                 }
             }
         };
