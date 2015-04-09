@@ -81,6 +81,10 @@ public class CommandAdmin implements CommandExecutor {
             UuidResolver.get().getUUIDAsync(input, new Callback<MojangProfile>() {
                 @Override
                 public void run(MojangProfile obj) {
+                    if (obj == null){
+                        sender.sendMessage(ChatColor.RED + "Resolution Error");
+                        return;
+                    }
                     sender.sendMessage(ChatColor.YELLOW + "[?] " + obj.username + " = " + obj.uuid + " (" + (System.currentTimeMillis() - start) + "ms)");
                 }
             });

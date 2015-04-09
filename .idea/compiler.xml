@@ -25,5 +25,8 @@
         <module name="UUIDResolver" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="UUIDResolver" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
